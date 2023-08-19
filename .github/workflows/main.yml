@@ -1,0 +1,34 @@
+---
+name: Build & Release UI
+
+on:
+  push:
+    tags:
+      - "*"    
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: "rockylinux:8"
+    
+    env:
+      SERVICE_NAME: test
+      
+    steps:
+      - name: Get the tag name
+        run: echo "TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
+
+      - name: Get the clone and working directory name
+        run: |
+          echo "CLONE_DIR=/__w/${{ github.event.repository.name }}/${{ github.event.repository.name }}" >> $GITHUB_ENV
+          echo "WORKING_DIR=/__w/${{ env.SERVICE_NAME }}-${{ env.TAG }}" >> $GITHUB_ENV
+          
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - id: step1
+        working-directory: ${{ env.WORKING_DIR }}
+        run: ls >> "$GITHUB_OUTPUT"
+
+      - name: get output
+        run: echo  ${{ steps.step1.outputs.stdout }}  
