@@ -8,8 +8,8 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    container: "rockylinux:8"
+    runs-on: rockylinux:8
+    # container: "rockylinux:8"
     
     env:
       SERVICE_NAME: test
