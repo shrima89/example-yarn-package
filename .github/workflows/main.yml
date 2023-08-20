@@ -36,4 +36,4 @@ jobs:
               echo TEST=$p >> $GITHUB_OUTPUT
 
       - name: get output
-        run: echo  ${{ steps.step1.outputs.stdout }}  
+        run: echo  ${{ steps.step1.outputs.TEST }}  
