@@ -1,0 +1,50 @@
+---
+name: Build & Release UI
+
+on:
+  push:
+    tags:
+      - 'br'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: "rockylinux:8"
+    
+    env:
+      SERVICE_NAME: test
+      
+    steps:
+      - name: Get the tag name
+        run: echo "TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
+
+      - name: Get the clone and working directory name
+        run: |
+          echo "CLONE_DIR=/__w/${{ github.event.repository.name }}/${{ github.event.repository.name }}" >> $GITHUB_ENV
+          echo "WORKING_DIR=/__w/${{ env.SERVICE_NAME }}-${{ env.TAG }}" >> $GITHUB_ENV
+          
+      - name: checkout
+        uses: actions/checkout@v3
+
+      # - name: move files
+      #   run: cp -a ${{ env.CLONE_DIR }} ${{ env.WORKING_DIR }}
+        
+      # - id: step1
+      #   working-directory: ${{ env.WORKING_DIR }}
+      #   run: |
+      #         p=$(echo ls)
+      #         echo TEST=$p >> $GITHUB_OUTPUT
+
+      # - name: get output
+      #   run: echo  ${{ steps.step1.outputs.TEST }}  
+      - name: install dependencies
+        run: dnf module install -y nodejs:18 
+
+      - name: enable corepack
+        run: |
+            corepack enable
+            corepack prepare yarn@3.5.1 --activate
+            
+      - name: build package
+        # working-directory: ${{ env.WORKING_DIR }}
+        run:  yarn install

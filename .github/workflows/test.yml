@@ -1,0 +1,36 @@
+name: CI
+on:
+  pull_request:
+    branches: [ "br" ]
+
+jobs:
+  build:
+    name: Test
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set Node.js 16.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+
+      - name: Run install
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: install # will run `yarn install` command
+
+      - name: Tar up source
+        run: >
+           tar -zcf
+           node_modules.tar.gz 
+           node_modules
+           
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: node_modules.tar.gz 
+          tag: ${{ github.ref }}
+          overwrite: true
