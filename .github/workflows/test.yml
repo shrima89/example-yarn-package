@@ -21,5 +21,13 @@ jobs:
       - name: Tar up source
         run: >
            tar -zcf
-           $node_modules.tar.gz 
+           node_modules.tar.gz 
            node_modules
+           
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: node_modules.tar.gz 
+          tag: ${{ github.ref }}
+          overwrite: true
