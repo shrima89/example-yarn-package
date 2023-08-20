@@ -32,7 +32,7 @@ jobs:
       - id: step1
         working-directory: ${{ env.WORKING_DIR }}
         run: |
-              p=`echo ls`
+              p=$(echo ls)
               echo TEST=$p >> $GITHUB_OUTPUT
 
       - name: get output
