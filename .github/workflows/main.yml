@@ -29,11 +29,22 @@ jobs:
       - name: move files
         run: cp -a ${{ env.CLONE_DIR }} ${{ env.WORKING_DIR }}
         
-      - id: step1
-        working-directory: ${{ env.WORKING_DIR }}
-        run: |
-              p=$(echo ls)
-              echo TEST=$p >> $GITHUB_OUTPUT
+      # - id: step1
+      #   working-directory: ${{ env.WORKING_DIR }}
+      #   run: |
+      #         p=$(echo ls)
+      #         echo TEST=$p >> $GITHUB_OUTPUT
 
-      - name: get output
-        run: echo  ${{ steps.step1.outputs.TEST }}  
+      # - name: get output
+      #   run: echo  ${{ steps.step1.outputs.TEST }}  
+      - name: install dependencies
+        run: dnf module install -y nodejs:18 
+
+      - name: enable corepack
+        run: |
+            corepack enable
+            corepack prepare yarn@3.5.1 --activate
+            
+      - name: build package
+        working-directory: ${{ env.WORKING_DIR }}
+        run:  yarn install
