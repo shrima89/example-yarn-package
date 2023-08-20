@@ -31,7 +31,9 @@ jobs:
         
       - id: step1
         working-directory: ${{ env.WORKING_DIR }}
-        run: echo ls >> "$GITHUB_OUTPUT"
+        run: |
+              p=`echo ls`
+              echo TEST=$p >> $GITHUB_OUTPUT
 
       - name: get output
         run: echo  ${{ steps.step1.outputs.stdout }}  
