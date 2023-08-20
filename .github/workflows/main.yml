@@ -8,8 +8,8 @@ on:
 
 jobs:
   build:
-    runs-on: rockylinux:8
-    # container: "rockylinux:8"
+    runs-on: ubuntu-latest
+    container: "rockylinux:8"
     
     env:
       SERVICE_NAME: test
@@ -26,8 +26,8 @@ jobs:
       - name: checkout
         uses: actions/checkout@v3
 
-      - name: move files
-        run: cp -a ${{ env.CLONE_DIR }} ${{ env.WORKING_DIR }}
+      # - name: move files
+      #   run: cp -a ${{ env.CLONE_DIR }} ${{ env.WORKING_DIR }}
         
       # - id: step1
       #   working-directory: ${{ env.WORKING_DIR }}
@@ -46,5 +46,5 @@ jobs:
             corepack prepare yarn@3.5.1 --activate
             
       - name: build package
-        working-directory: ${{ env.WORKING_DIR }}
+        # working-directory: ${{ env.WORKING_DIR }}
         run:  yarn install
